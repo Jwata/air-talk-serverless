@@ -4,6 +4,8 @@ service:
 # Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
 
 provider:
   name: aws
@@ -40,3 +42,27 @@ functions:
       - http:
           method: delete
           path: images
+
+custom:
+  dynamodb:
+    start:
+      migrate: true
+  serverless-offline:
+    port: 8080
+
+resources:
+  Resources:
+    Image:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Image
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
