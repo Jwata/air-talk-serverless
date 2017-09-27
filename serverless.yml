@@ -10,6 +10,12 @@ provider:
   runtime: nodejs6.10
 
 functions:
+  listImages:
+    handler: image.index
+    events:
+      - http:
+          method: get
+          path: image
   # Example without LAMBDA-PROXY integration
   # Invoking locally:
   # sls webpack invoke -f first
