@@ -40,17 +40,3 @@ functions:
       - http:
           method: delete
           path: images
-  # Example without LAMBDA-PROXY integration
-  # Invoking locally:
-  # sls webpack invoke -f first
-  first:
-    handler: first.hello
-  # Example with LAMBDA-PROXY integration
-  # Invoking locally:
-  # sls webpack invoke -f second
-  second:
-    handler: second.hello
-    events:
-      - http:
-          method: get
-          path: second
