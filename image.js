@@ -11,38 +11,41 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
 export const index = (event, context, callback) => {
   const params = { TableName: 'Image' };
   dynamoDb.scan(params, (error, data) => {
-    const response = (!error)
-      ? { statusCode: 200, body: JSON.stringify({ images: data.Items }) }
-      : { statusCode: 400, body: JSON.stringify({ error: error.text }) };
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify({ images: data.Items })
+    };
     callback(error, response);
   });
 };
 
 export const create = (event, context, callback) => {
-  const url = event.url;
+  const body = JSON.parse(event.body);
   const id = crypto.randomBytes(16).toString('hex');
+  const url = body.url;
+  const image = { id: id, url: url };
   const params = {
     TableName: 'Image',
-    Item: { id: id, url: url }
-  };
+    Item: image
+  }
   dynamoDb.put(params, (error) => {
-    const response = (!error)
-      ? { statusCode: 200 }
-      : { statusCode: 400, body: JSON.stringify({ error: error.text }) };
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(image)
+    };
     callback(error, response);
   });
 };
 
 export const remove = (event, context, callback) => {
-  const id = event.id;
+  const body = JSON.parse(event.body);
+  const id= body.id;
   const params = {
     TableName: 'Image',
     Key: { id: id }
   };
   dynamoDb.delete(params, (error) => {
-    const response = (!error)
-      ? { statusCode: 200 }
-      : { statusCode: 400, body: JSON.stringify({ error: error.text }) };
+    const response = { statusCode: 200 };
     callback(error, response);
   });
 };
