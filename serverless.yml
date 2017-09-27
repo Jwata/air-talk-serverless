@@ -15,7 +15,19 @@ functions:
     events:
       - http:
           method: get
-          path: image
+          path: images
+  addImage:
+    handler: image.create
+    events:
+      - http:
+          method: post
+          path: images
+  deleteImage:
+    handler: image.remove
+    events:
+      - http:
+          method: delete
+          path: images
   # Example without LAMBDA-PROXY integration
   # Invoking locally:
   # sls webpack invoke -f first
