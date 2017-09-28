@@ -53,23 +53,21 @@ custom:
   serverless-offline:
     port: 8080
 
-# TODO: This makes an error 'Image already exists' at re-deploying, but this is necessary for the local dynamo migration
+# TODO: Comment out AWS::DynamopDB::Table resources to avoid an error 'Image already exists' at re-deploying.
 # https://github.com/serverless/serverless/issues/3183
-#
-# resources:
-#   Resources:
-#     ImageTable:
-#       Type: AWS::DynamoDB::Table
-#       DeletionPolicy: Retain
-#       Properties:
-#         TableName: Image
-#         AttributeDefinitions:
-#           - AttributeName: id
-#             AttributeType: S
-#         KeySchema:
-#           - AttributeName: id
-#             KeyType: HASH
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
-
+resources:
+  Resources:
+    ImageTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: Image
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
