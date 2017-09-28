@@ -11,8 +11,12 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
 export const index = (event, context, callback) => {
   const params = { TableName: 'Image' };
   dynamoDb.scan(params, (error, data) => {
+    const headers =   {
+      'Access-Control-Allow-Origin': '*'
+    };
     const response = {
       statusCode: 200,
+      headers: headers,
       body: JSON.stringify({ images: data.Items })
     };
     callback(error, response);
@@ -29,8 +33,12 @@ export const create = (event, context, callback) => {
     Item: image
   }
   dynamoDb.put(params, (error) => {
+    const headers =   {
+      'Access-Control-Allow-Origin': '*'
+    };
     const response = {
       statusCode: 200,
+      headers: headers,
       body: JSON.stringify(image)
     };
     callback(error, response);
@@ -45,7 +53,13 @@ export const remove = (event, context, callback) => {
     Key: { id: id }
   };
   dynamoDb.delete(params, (error) => {
-    const response = { statusCode: 200 };
+    const headers =   {
+      'Access-Control-Allow-Origin': '*'
+    };
+    const response = {
+      statusCode: 200,
+      headers: headers
+    };
     callback(error, response);
   });
 };
