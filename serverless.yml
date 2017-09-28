@@ -1,5 +1,5 @@
 service:
-  name: aws-nodejs-ecma-script
+  name: air-talk
 
 # Add the serverless-webpack plugin
 plugins:
@@ -30,18 +30,21 @@ functions:
       - http:
           method: get
           path: images
+          cors: true
   addImage:
     handler: image.create
     events:
       - http:
           method: post
           path: images
+          cors: true
   deleteImage:
     handler: image.remove
     events:
       - http:
           method: delete
           path: images
+          cors: true
 
 custom:
   dynamodb:
@@ -50,19 +53,23 @@ custom:
   serverless-offline:
     port: 8080
 
-resources:
-  Resources:
-    Image:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: Image
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+# TODO: This makes an error 'Image already exists' at re-deploying, but this is necessary for the local dynamo migration
+# https://github.com/serverless/serverless/issues/3183
+#
+# resources:
+#   Resources:
+#     ImageTable:
+#       Type: AWS::DynamoDB::Table
+#       DeletionPolicy: Retain
+#       Properties:
+#         TableName: Image
+#         AttributeDefinitions:
+#           - AttributeName: id
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: id
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
 
